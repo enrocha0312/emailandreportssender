@@ -1,4 +1,4 @@
-package com.eduardondarocha.mindsimapp.email.config;
+package com.eduardondarocha.mindsimapp.config.email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
-package com.eduardondarocha.mindsimapp.email.service;
+package com.eduardondarocha.mindsimapp.service;
 
-import com.eduardondarocha.mindsimapp.email.entity.MensagemEmail;
+import com.eduardondarocha.mindsimapp.model.MensagemEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;

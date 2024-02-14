@@ -1,5 +1,6 @@
-package com.eduardondarocha.mindsimapp.config;
+package com.eduardondarocha.mindsimapp.config.batch;
 
+import com.eduardondarocha.mindsimapp.service.EmailService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -18,7 +19,8 @@ import org.springframework.context.annotation.Configuration;
 public class BatchConfig {
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
-
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
     @Bean

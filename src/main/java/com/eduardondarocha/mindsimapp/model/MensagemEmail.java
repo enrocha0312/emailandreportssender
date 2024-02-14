@@ -1,4 +1,4 @@
-package com.eduardondarocha.mindsimapp.email.entity;
+package com.eduardondarocha.mindsimapp.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
