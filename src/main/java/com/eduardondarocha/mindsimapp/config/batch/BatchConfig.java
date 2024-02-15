@@ -1,5 +1,6 @@
 package com.eduardondarocha.mindsimapp.config.batch;
 
+import com.eduardondarocha.mindsimapp.model.MensagemEmail;
 import com.eduardondarocha.mindsimapp.service.EmailService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -14,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @EnableBatchProcessing
 @Configuration
 public class BatchConfig {
@@ -27,15 +32,28 @@ public class BatchConfig {
     public Job imprimeOlaJob(){
         return jobBuilderFactory
                 .get("imprimeOlaOjb")
-                .start(imprimeOlaStep())
+                .start(enviaEmailStep())
                 .build();
     }
-    public Step imprimeOlaStep(){
+    public Step enviaEmailStep(){
         return stepBuilderFactory
-                .get("imprimeOlaStep").tasklet(new Tasklet() {
+                .get("enviaEmailStep").tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                        System.out.println("Ola mundo");
+                        System.out.println("Enviando e-mail");
+                        MensagemEmail mensagemEmail = MensagemEmail.builder()
+                                .texto("E-mail disparado pelo spring batch")
+                                .destinatarios(Stream.of("fmurad@mindsim.com.br",
+                                        "enrocha0312@gmail.com").collect(Collectors.toList()))
+                                .assunto("Teste Spring Batch de envio de arquivo")
+                                .remetente("enrtecnologiaeconhecimento@gmail.com")
+                                .anexo("D:/Arquivos_Github/petrorestapi/src/main/java/com/mindsim/petroapi/files/testemindsim.txt")
+                                .build();
+                        try {
+                            emailService.sendEmailWithFile(mensagemEmail);
+                        }catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
                         return RepeatStatus.FINISHED;
                     }
                 }).build();
