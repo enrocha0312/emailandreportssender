@@ -1,6 +1,7 @@
 package com.eduardondarocha.mindsimapp.config.batch;
 
 import com.eduardondarocha.mindsimapp.model.MensagemEmail;
+import com.eduardondarocha.mindsimapp.pdfutils.PdfHtmlConverter;
 import com.eduardondarocha.mindsimapp.service.EmailService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -15,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.nio.file.Paths;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,14 +41,15 @@ public class BatchConfig {
                 .get("enviaEmailStep").tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+                        String anexo = PdfHtmlConverter.converterHTMLparaPDF("arquivoteste");
                         System.out.println("Enviando e-mail");
                         MensagemEmail mensagemEmail = MensagemEmail.builder()
-                                .texto("E-mail disparado pelo spring batch")
+                                .texto("Esse e-mail foi enviado após converter um HTML para PDF")
                                 .destinatarios(Stream.of("fmurad@mindsim.com.br",
                                         "enrocha0312@gmail.com").collect(Collectors.toList()))
                                 .assunto("Teste Spring Batch de envio de arquivo")
                                 .remetente("enrtecnologiaeconhecimento@gmail.com")
-                                .anexo("D:/Arquivos_Github/petrorestapi/src/main/java/com/mindsim/petroapi/files/testemindsim.txt")
+                                .anexo(anexo)
                                 .build();
                         try {
                             emailService.sendEmailWithFile(mensagemEmail);
